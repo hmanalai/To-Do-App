@@ -13,13 +13,19 @@ import java.util.List;
 //
  class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> {
 
+     public interface OnClickListener {
+         void onItemClicked(int position);
+     }
+
      public interface OnLongClickListener{
          void onItemLongClicked(int position);
      }
 
      OnLongClickListener longClickListener;
+     OnClickListener clickListener;
      List<String> items;
-     public ItemsAdapter(List<String> items, OnLongClickListener longClickListener) {
+     public ItemsAdapter(List<String> items, OnLongClickListener longClickListener, OnClickListener clickListener) {
+         this.clickListener = clickListener;
          this.items = items;
          this.longClickListener = longClickListener;
     }
@@ -53,6 +59,14 @@ import java.util.List;
 
         public void bind(String item) {
              tv_item.setText(item);
+             tv_item.setOnClickListener(new View.OnClickListener(){
+
+                 @Override
+                 public void onClick(View v) {
+                     clickListener.onItemClicked(getAdapterPosition());
+
+                 }
+             });
              tv_item.setOnLongClickListener(new View.OnLongClickListener() {
                  @Override
                  public boolean onLongClick(View v) {
